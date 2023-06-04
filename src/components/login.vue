@@ -49,7 +49,9 @@
       </div>
       <div class="login__sign-up">
         <h3 class="login__sign-txt">Don’t have an account?</h3>
-        <button class="login__sign-btn">Sign Up</button>
+        <button class="login__sign-btn" @click="$router.push('register')">
+          Sign Up
+        </button>
       </div>
     </div>
   </div>
