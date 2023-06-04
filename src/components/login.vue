@@ -25,7 +25,7 @@
         <button class="login__forgot-paswd">Forgot Password?</button>
       </div>
 
-      <button class="login__btn">Login</button>
+      <button class="login__btn" @click="$router.push('main')">Login</button>
 
       <div class="login-element">
         <div class="line"></div>
@@ -74,7 +74,7 @@ export default {
     align-items: center;
   }
   &__logo {
-    margin: 70px 0;
+    margin: 40px 0;
   }
   &__title {
     margin-bottom: 30px;
