@@ -12,6 +12,7 @@
         <h2 class="register__title">Create an account</h2>
         <div class="register__user-name">
           <input type="text" placeholder="Username" class="register__input" />
+          <p class="register__error-input">Имя пользователя</p>
         </div>
         <div class="register__email">
           <input
@@ -19,9 +20,11 @@
             placeholder="Enter your email address"
             class="register__input"
           />
+          <p class="register__error-input">Адрес</p>
         </div>
         <div class="register__paswd">
           <input type="text" placeholder="Password" class="register__input" />
+          <p class="register__error-input">Пароль</p>
         </div>
         <div class="register__conf-paswd">
           <input
@@ -29,6 +32,7 @@
             placeholder="Confirm Password"
             class="register__input"
           />
+          <p class="register__error-input">Повторите пароль</p>
         </div>
       </div>
 
@@ -84,7 +88,7 @@ export default {
     align-items: center;
   }
   &__logo {
-    margin: 40px 0;
+    margin: 25px 0;
   }
   &__title {
     margin-bottom: 30px;
@@ -164,6 +168,10 @@ export default {
     font-weight: 700;
     font-size: 16px;
   }
+  &__error-input {
+    color: red;
+    margin: 0px 0px 0px 10px;
+  }
 }
 
 .login__input::placeholder {
@@ -195,5 +203,9 @@ export default {
 
 .login-element {
   margin: 30px 0;
+}
+
+input:focus {
+  border: 1px solid #46a358;
 }
 </style>

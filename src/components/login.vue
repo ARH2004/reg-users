@@ -14,6 +14,7 @@
             placeholder="almamun_uxui@outlook.com"
             class="login__input-login"
           />
+          <p class="login__error-input">Почта</p>
         </div>
         <div class="login__user-paswd">
           <input
@@ -21,6 +22,7 @@
             placeholder="password"
             class="login__input-login"
           />
+          <p class="login__error-input">Пароль</p>
         </div>
         <button class="login__forgot-paswd">Forgot Password?</button>
       </div>
@@ -163,6 +165,10 @@ export default {
     font-weight: 700;
     font-size: 16px;
   }
+  &__error-input {
+    color: red;
+    margin: 5px 0 0 10px;
+  }
 }
 
 .login__input-login::placeholder {
@@ -194,5 +200,8 @@ export default {
 
 .login-element {
   margin: 30px 0;
+}
+input:focus {
+  border: 1px solid #46a358;
 }
 </style>
