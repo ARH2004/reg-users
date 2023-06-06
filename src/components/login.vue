@@ -14,6 +14,7 @@
               type="text"
               placeholder="almamun_uxui@outlook.com"
               class="login__input-login"
+              v-model="email"
             />
             <p class="login__error-input">Почта</p>
           </div>
@@ -22,6 +23,7 @@
               type="text"
               placeholder="password"
               class="login__input-login"
+              v-model="password"
             />
             <p class="login__error-input">Пароль</p>
           </div>
@@ -64,11 +66,32 @@
   </form>
 </template>
 <script>
+import useValidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
+
 export default {
   name: "login",
+  data() {
+    return {
+      v$: useValidate(),
+      email: "",
+      password: "",
+    };
+  },
+  validations() {
+    return {
+      email: { required },
+      password: { required },
+    };
+  },
   methods: {
     submitHendel() {
-      this.$router.push("/main");
+      this.v$.$validate(); // checks all inputs
+      if (!this.v$.$error) {
+        this.$router.push("/main");
+      } else {
+        return;
+      }
     },
   },
 };
