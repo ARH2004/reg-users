@@ -1,73 +1,76 @@
 <template>
-  <form @submit.prevent="submitHendel">
-    <div class="login">
-      <div class="container">
-        <div class="login__wrapepr">
-          <div class="login__logo">
-            <img src="@/assets/images/Logo.svg" alt="logo" />
+  <!-- <form> -->
+  <div class="login">
+    <div class="container">
+      <div class="login__wrapepr">
+        <div class="login__logo">
+          <img src="@/assets/images/Logo.svg" alt="logo" />
+        </div>
+
+        <h1 class="login__title">Login</h1>
+
+        <div class="login__user-name">
+          <input
+            type="text"
+            placeholder="almamun_uxui@outlook.com"
+            class="login__input-login"
+            v-model="email"
+          />
+          <p class="login__error-input" v-if="v$.email.$error">
+            {{ v$.email.$errors[0].$message }}
+          </p>
+        </div>
+        <div class="login__user-paswd">
+          <input
+            type="text"
+            placeholder="password"
+            class="login__input-login"
+            v-model="password"
+          />
+          <p class="login__error-input" v-if="v$.password.$error">
+            {{ v$.password.$errors[0].$message }}
+          </p>
+        </div>
+        <!-- <button class="login__forgot-paswd">Forgot Password?</button> -->
+      </div>
+
+      <button class="login__btn" type="submit" @click="submitHendel">
+        Login
+      </button>
+
+      <div class="login-element">
+        <div class="line"></div>
+        <p class="login-element__txt">Or login with</p>
+        <div class="line"></div>
+      </div>
+
+      <div class="login__alternative">
+        <button class="login__alternative-google">
+          <div>
+            <img src="@/assets/images/icons/google.svg" alt="icon-google" />
           </div>
-
-          <h1 class="login__title">Login</h1>
-
-          <div class="login__user-name">
-            <input
-              type="text"
-              placeholder="almamun_uxui@outlook.com"
-              class="login__input-login"
-              v-model="email"
-            />
-            <p class="login__error-input">Почта</p>
+          <p class="login__alternative-google-txt">Login with Google</p>
+        </button>
+        <button class="login__alternative-facebook">
+          <div>
+            <img src="@/assets/images/icons/facebook.svg" alt="icon-facebook" />
           </div>
-          <div class="login__user-paswd">
-            <input
-              type="text"
-              placeholder="password"
-              class="login__input-login"
-              v-model="password"
-            />
-            <p class="login__error-input">Пароль</p>
-          </div>
-          <button class="login__forgot-paswd">Forgot Password?</button>
-        </div>
-
-        <button class="login__btn" type="submit">Login</button>
-
-        <div class="login-element">
-          <div class="line"></div>
-          <p class="login-element__txt">Or login with</p>
-          <div class="line"></div>
-        </div>
-
-        <div class="login__alternative">
-          <button class="login__alternative-google">
-            <div>
-              <img src="@/assets/images/icons/google.svg" alt="icon-google" />
-            </div>
-            <p class="login__alternative-google-txt">Login with Google</p>
-          </button>
-          <button class="login__alternative-facebook">
-            <div>
-              <img
-                src="@/assets/images/icons/facebook.svg"
-                alt="icon-facebook"
-              />
-            </div>
-            <p class="login__alternative-facebook-txt">Login with Facebook</p>
-          </button>
-        </div>
-        <div class="login__sign-up">
-          <h3 class="login__sign-txt">Don’t have an account?</h3>
-          <button class="login__sign-btn" @click="$router.push('register')">
-            Sign Up
-          </button>
-        </div>
+          <p class="login__alternative-facebook-txt">Login with Facebook</p>
+        </button>
+      </div>
+      <div class="login__sign-up">
+        <h3 class="login__sign-txt">Don’t have an account?</h3>
+        <button class="login__sign-btn" @click="$router.push('register')">
+          Sign Up
+        </button>
       </div>
     </div>
-  </form>
+  </div>
+  <!-- </form> -->
 </template>
 <script>
 import useValidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import { required, email, minLength } from "@vuelidate/validators";
 
 export default {
   name: "login",
@@ -80,8 +83,8 @@ export default {
   },
   validations() {
     return {
-      email: { required },
-      password: { required },
+      email: { required, email },
+      password: { required, minLength: minLength(8) },
     };
   },
   methods: {
