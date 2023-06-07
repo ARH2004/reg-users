@@ -18,7 +18,25 @@
               class="register__input"
               v-model="userName.name"
             />
-            <p class="register__error-input">Имя пользователя</p>
+            <p
+              class="register__error-input"
+              v-if="
+                v$.userName.name.$error &&
+                v$.userName.name.$errors[0].$params.type === 'required'
+              "
+            >
+              Имя пользователя не должо быть пустым
+            </p>
+            <p
+              class="register__error-input"
+              v-if="
+                v$.userName.name.$error &&
+                v$.userName.name.$errors[0].$params.type === 'minLength'
+              "
+            >
+              Минимальная длина имени {{ userName.minLengthName }} символов.
+              Сейчас он {{ userName.name.length }}
+            </p>
           </div>
           <div class="register__email">
             <input
@@ -27,7 +45,23 @@
               class="register__input"
               v-model="email"
             />
-            <p class="register__error-input">Адрес</p>
+            <p
+              class="register__error-input"
+              v-if="
+                v$.email.$error &&
+                v$.email.$errors[0].$params.type === 'required'
+              "
+            >
+              Поле Email не должно быть пустым
+            </p>
+            <p
+              class="register__error-input"
+              v-if="
+                v$.email.$error && v$.email.$errors[0].$params.type === 'email'
+              "
+            >
+              Введите корректный Email адрес
+            </p>
           </div>
           <div class="register__paswd">
             <input
@@ -132,6 +166,7 @@ export default {
     createHendel() {
       this.v$.$validate(); // checks all inputs
       if (this.v$.$error) {
+        console.log(this.v$.userName.name.$errors);
         return;
       } else {
         this.$router.push("/main");
