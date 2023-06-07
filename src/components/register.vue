@@ -170,7 +170,7 @@ export default {
   }
   &__error-input {
     color: red;
-    margin: 0px 0px 0px 10px;
+    margin: 0px 0px 2px 10px;
   }
 }
 

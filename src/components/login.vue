@@ -44,7 +44,7 @@
               type="text"
               placeholder="password"
               class="login__input-login"
-              v-model="password.password"
+              v-model.trim="password.password"
               :class="{
                 'error-validate': v$.password.password.$error,
               }"
@@ -67,7 +67,8 @@
               "
             >
               <!-- {{ v$.password.$errors[0].$message }} -->
-              Минимальная длина пароля {{ password.minLengthPaswd }} символов
+              Минимальная длина пароля {{ password.minLengthPaswd }} символов.
+              Сейчас он {{ password.password.length }}
             </p>
           </div>
           <button class="login__forgot-paswd">Forgot Password?</button>
@@ -141,10 +142,15 @@ export default {
   methods: {
     submitHendel() {
       this.v$.$validate(); // checks all inputs
-      if (!this.v$.$error) {
-        this.$router.push("/main");
-      } else {
+      if (this.v$.$error) {
         return;
+      } else {
+        const formData = {
+          email: this.email,
+          password: this.password.password,
+        };
+        console.log(formData);
+        this.$router.push("/main");
       }
     },
   },
