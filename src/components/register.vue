@@ -1,88 +1,142 @@
 <template>
-  <div class="register">
-    <div class="container">
-      <div class="register__wrapper">
-        <div>
-          <img
-            src="@/assets/images/Logo.svg"
-            class="register__logo"
-            alt="logo"
-          />
-        </div>
-        <h2 class="register__title">Create an account</h2>
-        <div class="register__user-name">
-          <input type="text" placeholder="Username" class="register__input" />
-          <p class="register__error-input">Имя пользователя</p>
-        </div>
-        <div class="register__email">
-          <input
-            type="text"
-            placeholder="Enter your email address"
-            class="register__input"
-          />
-          <p class="register__error-input">Адрес</p>
-        </div>
-        <div class="register__paswd">
-          <input type="text" placeholder="Password" class="register__input" />
-          <p class="register__error-input">Пароль</p>
-        </div>
-        <div class="register__conf-paswd">
-          <input
-            type="text"
-            placeholder="Confirm Password"
-            class="register__input"
-          />
-          <p class="register__error-input">Повторите пароль</p>
-        </div>
-      </div>
-
-      <button class="register__btn-create">Create an account</button>
-
-      <div class="login-element">
-        <div class="line"></div>
-        <p class="login-element__txt">Or register with</p>
-        <div class="line"></div>
-      </div>
-
-      <div class="register__alternative">
-        <button class="register__alternative-google">
+  <form @submit.prevent>
+    <div class="register">
+      <div class="container">
+        <div class="register__wrapper">
           <div>
-            <img src="@/assets/images/icons/google.svg" alt="icon-google" />
+            <img
+              src="@/assets/images/Logo.svg"
+              class="register__logo"
+              alt="logo"
+            />
           </div>
-          <p class="register__alternative-google-txt">Continue with Google</p>
-        </button>
-        <button class="register__alternative-facebook">
-          <div>
-            <img src="@/assets/images/icons/facebook.svg" alt="icon-facebook" />
+          <h2 class="register__title">Create an account</h2>
+          <div class="register__user-name">
+            <input
+              type="text"
+              placeholder="Username"
+              class="register__input"
+              v-model="userName.name"
+            />
+            <p class="register__error-input">Имя пользователя</p>
           </div>
-          <p class="register__alternative-facebook-txt">
-            Continue with Facebook
-          </p>
-        </button>
-      </div>
+          <div class="register__email">
+            <input
+              type="text"
+              placeholder="Enter your email address"
+              class="register__input"
+              v-model="email"
+            />
+            <p class="register__error-input">Адрес</p>
+          </div>
+          <div class="register__paswd">
+            <input
+              type="text"
+              placeholder="Password"
+              class="register__input"
+              v-model="login.password"
+            />
+            <p class="register__error-input">Пароль</p>
+          </div>
+          <div class="register__conf-paswd">
+            <input
+              type="text"
+              placeholder="Confirm Password"
+              class="register__input"
+              v-model="login.confirm"
+            />
+            <p class="register__error-input">Повторите пароль</p>
+          </div>
+        </div>
 
-      <div class="register__sign-up">
-        <h3 class="register__sign-txt">Already have an account?</h3>
-        <button class="register__sign-btn" @click="$router.push('/')">
-          Login
+        <button
+          class="register__btn-create"
+          type="submit"
+          @click="createHendel"
+        >
+          Create an account
         </button>
+
+        <div class="login-element">
+          <div class="line"></div>
+          <p class="login-element__txt">Or register with</p>
+          <div class="line"></div>
+        </div>
+
+        <div class="register__alternative">
+          <button class="register__alternative-google">
+            <div>
+              <img src="@/assets/images/icons/google.svg" alt="icon-google" />
+            </div>
+            <p class="register__alternative-google-txt">Continue with Google</p>
+          </button>
+          <button class="register__alternative-facebook">
+            <div>
+              <img
+                src="@/assets/images/icons/facebook.svg"
+                alt="icon-facebook"
+              />
+            </div>
+            <p class="register__alternative-facebook-txt">
+              Continue with Facebook
+            </p>
+          </button>
+        </div>
+
+        <div class="register__sign-up">
+          <h3 class="register__sign-txt">Already have an account?</h3>
+          <button class="register__sign-btn" @click="$router.push('/')">
+            Login
+          </button>
+        </div>
       </div>
     </div>
-  </div>
+  </form>
 </template>
 <script>
+import useValidate from "@vuelidate/core";
+import { required, email, minLength } from "@vuelidate/validators";
+
 export default {
   name: "register",
   data() {
     return {
-      name: "",
+      v$: useValidate(),
+      userName: {
+        name: "",
+        minLengthName: 2,
+      },
       email: "",
       login: {
         password: "",
-        confPassword: "",
+        confirm: "",
         minLengthPaswd: 8,
       },
     };
+  },
+  validations() {
+    const minLengthPassword = this.login.minLengthPaswd;
+    const minLengthNames = this.userName.minLengthName;
+    return {
+      userName: {
+        name: { required, minLength: minLength(minLengthNames) },
+      },
+      email: { required, email },
+      login: {
+        password: { required, minLength: minLength(minLengthPassword) },
+        confirm: { required, minLength: minLength(minLengthPassword) },
+      },
+    };
+  },
+  methods: {
+    createHendel() {
+      this.v$.$validate(); // checks all inputs
+      if (this.v$.$error) {
+        return;
+      } else {
+        this.$router.push("/main");
+      }
+    },
   },
 };
 </script>

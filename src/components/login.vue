@@ -128,13 +128,13 @@ export default {
     };
   },
   validations() {
-    const minLengthPasswordd = this.login.minLengthPaswd;
+    const minLengthPassword = this.login.minLengthPaswd;
     return {
       email: { required, email },
       login: {
         password: {
           required,
-          minLength: minLength(minLengthPasswordd),
+          minLength: minLength(minLengthPassword),
         },
       },
     };
