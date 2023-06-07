@@ -14,10 +14,29 @@
               type="text"
               placeholder="almamun_uxui@outlook.com"
               class="login__input-login"
-              v-model="email"
+              v-model.trim="email"
+              :class="{
+                'error-validate': v$.email.$error,
+              }"
             />
-            <p class="login__error-input" v-if="v$.email.$error">
-              {{ v$.email.$errors[0].$message }}
+            <p
+              class="login__error-input"
+              v-if="
+                v$.email.$error &&
+                v$.email.$errors[0].$params.type === 'required'
+              "
+            >
+              <!-- {{ v$.email.$errors[0].$message }} -->
+              Поле Email не должно быть пустым
+            </p>
+            <p
+              class="login__error-input"
+              v-if="
+                v$.email.$error && v$.email.$errors[0].$params.type === 'email'
+              "
+            >
+              <!-- {{ v$.email.$errors[0].$message }} -->
+              Введите корректный Email адрес
             </p>
           </div>
           <div class="login__user-paswd">
@@ -25,10 +44,30 @@
               type="text"
               placeholder="password"
               class="login__input-login"
-              v-model="password"
+              v-model="password.password"
+              :class="{
+                'error-validate': v$.password.password.$error,
+              }"
             />
-            <p class="login__error-input" v-if="v$.password.$error">
-              {{ v$.password.$errors[0].$message }}
+            <p
+              class="login__error-input"
+              v-if="
+                v$.password.password.$error &&
+                v$.password.password.$errors[0].$params.type === 'required'
+              "
+            >
+              <!-- {{ v$.password.$errors[0].$message }} -->
+              Поле Password не должно быть пустым
+            </p>
+            <p
+              class="login__error-input"
+              v-if="
+                v$.password.password.$error &&
+                v$.password.password.$errors[0].$params.type === 'minLength'
+              "
+            >
+              <!-- {{ v$.password.$errors[0].$message }} -->
+              Минимальная длина пароля {{ password.minLengthPaswd }} символов
             </p>
           </div>
           <button class="login__forgot-paswd">Forgot Password?</button>
@@ -81,13 +120,22 @@ export default {
     return {
       v$: useValidate(),
       email: "",
-      password: "",
+      password: {
+        password: "",
+        minLengthPaswd: 8,
+      },
     };
   },
   validations() {
+    const minLengthPasswordd = this.password.minLengthPaswd;
     return {
       email: { required, email },
-      password: { required, minLength: minLength(8) },
+      password: {
+        password: {
+          required,
+          minLength: minLength(minLengthPasswordd),
+        },
+      },
     };
   },
   methods: {
@@ -242,5 +290,11 @@ export default {
 }
 input:focus {
   border: 1px solid #46a358;
+}
+.error-validate:focus {
+  border: 1px solid red;
+}
+.error-validate {
+  border: 1px solid red;
 }
 </style>
