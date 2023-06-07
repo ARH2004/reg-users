@@ -73,6 +73,17 @@
 <script>
 export default {
   name: "register",
+  data() {
+    return {
+      name: "",
+      email: "",
+      login: {
+        password: "",
+        confPassword: "",
+        minLengthPaswd: 8,
+      },
+    };
+  },
 };
 </script>
 <style lang="scss" scoped>

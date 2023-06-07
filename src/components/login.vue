@@ -44,16 +44,16 @@
               type="text"
               placeholder="password"
               class="login__input-login"
-              v-model.trim="password.password"
+              v-model.trim="login.password"
               :class="{
-                'error-validate': v$.password.password.$error,
+                'error-validate': v$.login.password.$error,
               }"
             />
             <p
               class="login__error-input"
               v-if="
-                v$.password.password.$error &&
-                v$.password.password.$errors[0].$params.type === 'required'
+                v$.login.password.$error &&
+                v$.login.password.$errors[0].$params.type === 'required'
               "
             >
               <!-- {{ v$.password.$errors[0].$message }} -->
@@ -62,13 +62,13 @@
             <p
               class="login__error-input"
               v-if="
-                v$.password.password.$error &&
-                v$.password.password.$errors[0].$params.type === 'minLength'
+                v$.login.password.$error &&
+                v$.login.password.$errors[0].$params.type === 'minLength'
               "
             >
               <!-- {{ v$.password.$errors[0].$message }} -->
-              Минимальная длина пароля {{ password.minLengthPaswd }} символов.
-              Сейчас он {{ password.password.length }}
+              Минимальная длина пароля {{ login.minLengthPaswd }} символов.
+              Сейчас он {{ login.password.length }}
             </p>
           </div>
           <button class="login__forgot-paswd">Forgot Password?</button>
@@ -121,17 +121,17 @@ export default {
     return {
       v$: useValidate(),
       email: "",
-      password: {
+      login: {
         password: "",
         minLengthPaswd: 8,
       },
     };
   },
   validations() {
-    const minLengthPasswordd = this.password.minLengthPaswd;
+    const minLengthPasswordd = this.login.minLengthPaswd;
     return {
       email: { required, email },
-      password: {
+      login: {
         password: {
           required,
           minLength: minLength(minLengthPasswordd),
@@ -147,7 +147,7 @@ export default {
       } else {
         const formData = {
           email: this.email,
-          password: this.password.password,
+          password: this.login.password,
         };
         console.log(formData);
         this.$router.push("/main");
