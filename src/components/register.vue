@@ -16,7 +16,8 @@
               type="text"
               placeholder="Username"
               class="register__input"
-              v-model="userName.name"
+              v-model.trim="userName.name"
+              :class="{ 'error-validate': v$.userName.name.$error }"
             />
             <p
               class="register__error-input"
@@ -43,7 +44,10 @@
               type="text"
               placeholder="Enter your email address"
               class="register__input"
-              v-model="email"
+              v-model.trim="email"
+              :class="{
+                'error-validate': v$.email.$error,
+              }"
             />
             <p
               class="register__error-input"
@@ -68,18 +72,59 @@
               type="text"
               placeholder="Password"
               class="register__input"
-              v-model="login.password"
+              v-model.trim="login.password"
+              :class="{
+                'error-validate': v$.login.password.$error,
+              }"
             />
-            <p class="register__error-input">Пароль</p>
+            <p
+              class="register__error-input"
+              v-if="
+                v$.login.password.$error &&
+                v$.login.password.$errors[0].$params.type === 'required'
+              "
+            >
+              Поле Password не должно быть пустым
+            </p>
+            <p
+              class="register__error-input"
+              v-if="
+                v$.login.password.$error &&
+                v$.login.password.$errors[0].$params.type === 'minLength'
+              "
+            >
+              Минимальная длина пароля {{ login.minLengthPaswd }} символов.
+              Сейчас он {{ login.password.length }}
+            </p>
           </div>
           <div class="register__conf-paswd">
             <input
               type="text"
               placeholder="Confirm Password"
               class="register__input"
-              v-model="login.confirm"
+              v-model.trim="login.confirm"
+              :class="{
+                'error-validate': v$.login.confirm.$error,
+              }"
             />
-            <p class="register__error-input">Повторите пароль</p>
+            <p
+              class="register__error-input"
+              v-if="
+                v$.login.confirm.$error &&
+                v$.login.confirm.$errors[0].$params.type === 'required'
+              "
+            >
+              Повторите пароль
+            </p>
+            <p
+              class="register__error-input"
+              v-if="
+                v$.login.confirm.$error &&
+                v$.login.confirm.$errors[0].$params.type === 'sameAs'
+              "
+            >
+              Пароли не совпадают
+            </p>
           </div>
         </div>
 
@@ -129,7 +174,7 @@
 </template>
 <script>
 import useValidate from "@vuelidate/core";
-import { required, email, minLength } from "@vuelidate/validators";
+import { required, email, minLength, sameAs } from "@vuelidate/validators";
 
 export default {
   name: "register",
@@ -158,7 +203,7 @@ export default {
       email: { required, email },
       login: {
         password: { required, minLength: minLength(minLengthPassword) },
-        confirm: { required, minLength: minLength(minLengthPassword) },
+        confirm: { required, sameAs: sameAs(this.login.password) },
       },
     };
   },
@@ -166,9 +211,15 @@ export default {
     createHendel() {
       this.v$.$validate(); // checks all inputs
       if (this.v$.$error) {
-        console.log(this.v$.userName.name.$errors);
         return;
       } else {
+        const formData = {
+          name: this.userName.name,
+          email: this.email,
+          password: this.login.password,
+        };
+        console.log(formData);
+
         this.$router.push("/main");
       }
     },
@@ -307,5 +358,12 @@ export default {
 
 input:focus {
   border: 1px solid #46a358;
+}
+
+.error-validate:focus {
+  border: 1px solid red;
+}
+.error-validate {
+  border: 1px solid red;
 }
 </style>
