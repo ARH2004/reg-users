@@ -140,7 +140,7 @@ export default {
     };
   },
   methods: {
-    submitHendel() {
+    async submitHendel() {
       this.v$.$validate(); // checks all inputs
       if (this.v$.$error) {
         return;
@@ -149,8 +149,11 @@ export default {
           email: this.email,
           password: this.login.password,
         };
-        console.log(formData);
-        this.$router.push("/main");
+
+        try {
+          await this.$store.dispatch("login", formData);
+          this.$router.push("/main");
+        } catch (error) {}
       }
     },
   },
