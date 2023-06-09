@@ -23,6 +23,7 @@ export default {
         const auth = getAuth(app);
         await signInWithEmailAndPassword(auth, email, password);
       } catch (error) {
+				commit('setError', error)
         throw error;
       }
     },

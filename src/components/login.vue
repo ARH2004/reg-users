@@ -3,6 +3,7 @@
     <div class="login">
       <div class="container">
         <div class="login__wrapepr">
+          {{ errorMessage }}
           <div class="login__logo">
             <img src="@/assets/images/Logo.svg" alt="logo" />
           </div>
@@ -26,7 +27,6 @@
                 v$.email.$errors[0].$params.type === 'required'
               "
             >
-              <!-- {{ v$.email.$errors[0].$message }} -->
               Поле Email не должно быть пустым
             </p>
             <p
@@ -35,7 +35,6 @@
                 v$.email.$error && v$.email.$errors[0].$params.type === 'email'
               "
             >
-              <!-- {{ v$.email.$errors[0].$message }} -->
               Введите корректный Email адрес
             </p>
           </div>
@@ -56,7 +55,6 @@
                 v$.login.password.$errors[0].$params.type === 'required'
               "
             >
-              <!-- {{ v$.password.$errors[0].$message }} -->
               Поле Password не должно быть пустым
             </p>
             <p
@@ -66,7 +64,6 @@
                 v$.login.password.$errors[0].$params.type === 'minLength'
               "
             >
-              <!-- {{ v$.password.$errors[0].$message }} -->
               Минимальная длина пароля {{ login.minLengthPaswd }} символов.
               Сейчас он {{ login.password.length }}
             </p>
@@ -112,6 +109,7 @@
   </form>
 </template>
 <script>
+import { errorMessage } from "@/layout/errorMessage";
 import useValidate from "@vuelidate/core";
 import { required, email, minLength } from "@vuelidate/validators";
 
@@ -155,6 +153,19 @@ export default {
           this.$router.push("/main");
         } catch (error) {}
       }
+    },
+  },
+  computed: {
+    error() {
+      return this.$store.getters.error;
+    },
+    errorMessage() {
+      return errorMessage(this.$store.getters.error);
+    },
+  },
+  watch: {
+    error(fbError) {
+      console.log(fbError);
     },
   },
 };
