@@ -208,7 +208,7 @@ export default {
     };
   },
   methods: {
-    createHendel() {
+    async createHendel() {
       this.v$.$validate(); // checks all inputs
       if (this.v$.$error) {
         return;
@@ -218,9 +218,11 @@ export default {
           email: this.email,
           password: this.login.password,
         };
-        console.log(formData);
 
-        this.$router.push("/main");
+        try {
+          await this.$store.dispatch("register", formData);
+          this.$router.push("/main");
+        } catch (error) {}
       }
     },
   },

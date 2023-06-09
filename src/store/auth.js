@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getDatabase, ref, set } from "firebase/database";
 const firebaseConfig = {
 	apiKey: "AIzaSyDxLwtBmMSNJ92HM3BdU3yyw_DDeblq86A",
   authDomain: "vue-register-e146c.firebaseapp.com",
@@ -11,6 +11,10 @@ const firebaseConfig = {
   measurementId: "G-4HLV7D4H88"
 };
 
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const database = getDatabase(app); // Добавлено
+
 export default {
   actions: {
     async login({ dispatch, commit }, { email, password }) {
@@ -19,8 +23,27 @@ export default {
         const auth = getAuth(app);
         await signInWithEmailAndPassword(auth, email, password);
       } catch (error) {
-        throw error
+        throw error;
       }
-    }
+    },
+		async register({ dispatch }, { email, password, name }) {
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        const uid = await dispatch("getUid");
+        const userRef = ref(database, `/users/${uid}/info`); // Исправлено
+        await set(userRef, {
+          name: name,
+        });
+      } catch (error) {
+        throw error;
+      }
+    },
+    getUid() {
+      const user = auth.currentUser; // Исправлено
+      return user ? user.uid : null;
+    },
+    async logout() {
+      await auth.signOut(); // Исправлено
+    },
   }
-}
+};
