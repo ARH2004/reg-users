@@ -3,6 +3,7 @@
     <div class="register">
       <div class="container">
         <div class="register__wrapper">
+          {{ errorMessage }}
           <div>
             <img
               src="@/assets/images/Logo.svg"
@@ -175,6 +176,7 @@
 <script>
 import useValidate from "@vuelidate/core";
 import { required, email, minLength, sameAs } from "@vuelidate/validators";
+import { errorMessage } from "@/layout/errorMessage";
 
 export default {
   name: "register",
@@ -224,6 +226,19 @@ export default {
           this.$router.push("/main");
         } catch (error) {}
       }
+    },
+  },
+  computed: {
+    error() {
+      return this.$store.getters.error;
+    },
+    errorMessage() {
+      return errorMessage(this.$store.getters.error);
+    },
+  },
+  watch: {
+    error(fbError) {
+      console.log(fbError);
     },
   },
 };

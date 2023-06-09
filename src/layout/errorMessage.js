@@ -5,10 +5,12 @@ export function errorMessage(err) {
   const userNotFound = "auth/user-not-found";
   const authWrongPassword = "auth/wrong-password";
   const unknownError = "unknown";
+	const emailIsUsed = "auth/email-already-in-use"
 
   const errors = new Map([
     [userNotFound, "Такого пользователя не существует"],
     [authWrongPassword, "Неверный пароль или почта"],
+		[emailIsUsed, "Почта уже используется"],
     [unknownError, "Что-то пошло не так"],
   ]);
 

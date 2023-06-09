@@ -13,7 +13,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const database = getDatabase(app); // Добавлено
+const database = getDatabase(app);
 
 export default {
   actions: {
@@ -27,24 +27,25 @@ export default {
         throw error;
       }
     },
-		async register({ dispatch }, { email, password, name }) {
+		async register({ dispatch, commit }, { email, password, name }) {
       try {
         await createUserWithEmailAndPassword(auth, email, password);
         const uid = await dispatch("getUid");
-        const userRef = ref(database, `/users/${uid}/info`); // Исправлено
+        const userRef = ref(database, `/users/${uid}/info`);
         await set(userRef, {
           name: name,
         });
       } catch (error) {
+				commit('setError', error)
         throw error;
       }
     },
     getUid() {
-      const user = auth.currentUser; // Исправлено
+      const user = auth.currentUser;
       return user ? user.uid : null;
     },
     async logout() {
-      await auth.signOut(); // Исправлено
+      await auth.signOut();
     },
   }
 };
