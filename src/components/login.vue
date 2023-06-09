@@ -3,13 +3,14 @@
     <div class="login">
       <div class="container">
         <div class="login__wrapepr">
-          {{ errorMessage }}
           <div class="login__logo">
             <img src="@/assets/images/Logo.svg" alt="logo" />
           </div>
-
           <h1 class="login__title">Login</h1>
-
+          <p class="login__error-message" v-show="error && isVisibleError">
+            {{ errorMessage }}
+          </p>
+          <hr class="login__line-error" v-show="error && isVisibleError" />
           <div class="login__user-name">
             <input
               type="text"
@@ -123,6 +124,7 @@ export default {
         password: "",
         minLengthPaswd: 8,
       },
+      isVisibleError: false,
     };
   },
   validations() {
@@ -154,6 +156,9 @@ export default {
         } catch (error) {}
       }
     },
+    hideErrorMessage() {
+      this.isVisibleError = false;
+    },
   },
   computed: {
     error() {
@@ -166,6 +171,10 @@ export default {
   watch: {
     error(fbError) {
       console.log(fbError);
+      this.isVisibleError = !!fbError;
+      if (this.isVisibleError) {
+        setTimeout(this.hideErrorMessage, 2500);
+      }
     },
   },
 };
@@ -276,6 +285,19 @@ export default {
     color: red;
     margin: 5px 0 0 10px;
   }
+  &__line-error {
+    margin: 5px 0 10px 0;
+    height: 2px;
+    width: 100%;
+    background-color: red;
+    animation: lineAnimation 2.55s linear;
+  }
+  &__error-message {
+    text-align: center;
+    margin-top: 10px;
+    color: red;
+    font-size: 16px;
+  }
 }
 
 .login__input-login::placeholder {
@@ -316,5 +338,14 @@ input:focus {
 }
 .error-validate {
   border: 1px solid red;
+}
+
+@keyframes lineAnimation {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0;
+  }
 }
 </style>

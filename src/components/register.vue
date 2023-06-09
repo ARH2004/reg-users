@@ -10,7 +10,7 @@
               alt="logo"
             />
           </div>
-          <h2 class="register__title">Create an account</h2>
+          <h1 class="register__title">Create an account</h1>
           <p class="register__error-message" v-show="error && isVisibleError">
             {{ errorMessage }}
           </p>
@@ -359,6 +359,7 @@ export default {
     animation: lineAnimation 2.55s linear;
   }
   &__error-message {
+    text-align: center;
     margin-top: 10px;
     color: red;
     font-size: 16px;
