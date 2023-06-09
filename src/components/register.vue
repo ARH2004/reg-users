@@ -3,7 +3,6 @@
     <div class="register">
       <div class="container">
         <div class="register__wrapper">
-          {{ errorMessage }}
           <div>
             <img
               src="@/assets/images/Logo.svg"
@@ -12,6 +11,10 @@
             />
           </div>
           <h2 class="register__title">Create an account</h2>
+          <p class="register__error-message" v-show="error && isVisibleError">
+            {{ errorMessage }}
+          </p>
+          <hr class="register__line-error" v-show="error && isVisibleError" />
           <div class="register__user-name">
             <input
               type="text"
@@ -193,6 +196,7 @@ export default {
         confirm: "",
         minLengthPaswd: 8,
       },
+      isVisibleError: false,
     };
   },
   validations() {
@@ -227,6 +231,9 @@ export default {
         } catch (error) {}
       }
     },
+    hideErrorMessage() {
+      this.isVisibleError = false;
+    },
   },
   computed: {
     error() {
@@ -239,6 +246,10 @@ export default {
   watch: {
     error(fbError) {
       console.log(fbError);
+      this.isVisibleError = !!fbError;
+      if (this.isVisibleError) {
+        setTimeout(this.hideErrorMessage, 2500);
+      }
     },
   },
 };
@@ -340,6 +351,18 @@ export default {
     color: red;
     margin: 0px 0px 2px 10px;
   }
+  &__line-error {
+    margin: 5px 0 10px 0;
+    height: 2px;
+    width: 100%;
+    background-color: red;
+    animation: lineAnimation 2.55s linear;
+  }
+  &__error-message {
+    margin-top: 10px;
+    color: red;
+    font-size: 16px;
+  }
 }
 
 .login__input::placeholder {
@@ -382,5 +405,14 @@ input:focus {
 }
 .error-validate {
   border: 1px solid red;
+}
+
+@keyframes lineAnimation {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0;
+  }
 }
 </style>
